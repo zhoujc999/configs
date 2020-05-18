@@ -27,11 +27,13 @@ nnoremap j gj
 nnoremap k gk
 " Disable automatic commenting on new line
 autocmd Filetype * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-"Splits open windows bottom and right
+" Splits open windows bottom and right
 set splitbelow splitright
-
 " Don't increment numbers in octal notation
 set nrformats-=octal
+" Use OS clipboard by default
+set clipboard^=unnamed,unnamedplus
+
 " => VIM user interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Set 1 line to the cursor - when moving vertically using j/k
@@ -88,6 +90,7 @@ endif
 " set foldcolumn=1
 " if -- INSERT -- is unnecessary
 set noshowmode
+
 " => Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
@@ -124,12 +127,11 @@ set t_Co=256
 if &t_Co == 8 && $TERM !~# '^linux\|^Eterm'
   set t_Co=16
 endif
-
-
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf8
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
+
 " => Files, backups and undo
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Turn backup off, since most stuff is in SVN, git et.c anyway...
@@ -137,6 +139,7 @@ set nobackup
 set nowritebackup
 set nowb
 set noswapfile
+
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Use spaces instead of tabs
@@ -165,6 +168,7 @@ set foldlevelstart=10   " open most folds by default
 set foldnestmax=10      " 10 nested fold max
 set foldmethod=indent
 highlight ColorColumn ctermbg=058
+
 " => Status line
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Always show the status line
@@ -187,7 +191,6 @@ call plug#begin('~/.vim/plugged')
   Plug 'sheerun/vim-polyglot'
   Plug 'scrooloose/nerdtree'
   Plug 'scrooloose/nerdcommenter'
-  Plug 'neoclide/coc.nvim', {'do': './install.sh nightly'}
   Plug 'Yggdroot/indentLine'
   Plug 'junegunn/goyo.vim'
   Plug 'ntpeters/vim-better-whitespace'
@@ -224,4 +227,3 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Specific Directories
 
-nnoremap <leader>t :w<CR>:!/home/vcm/f2019-cs310-p1d-600/test_script.sh<CR>
