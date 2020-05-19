@@ -88,13 +88,15 @@ if has("gui_macvim")
 endif
 " Add a bit extra margin to the left
 " set foldcolumn=1
-" if -- INSERT -- is unnecessary
+" Hide -- INSERT --
 set noshowmode
 
 " => Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
-syntax enable
+if !exists("g:syntax_on")
+    syntax enable
+endif
 let g:lightline = {
       \ 'colorscheme': 'seoul256',
       \ 'active': {
@@ -144,30 +146,35 @@ set noswapfile
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Use spaces instead of tabs
 set autoindent
+set smartindent
 set expandtab
 " Be smart when using tabs ;)
 set smarttab
 " 1 tab == 2 spaces
 set formatoptions=tcqrn1
-set shiftwidth=2
-set tabstop=2
-set softtabstop=2
+set shiftwidth=4
+set tabstop=4 softtabstop=4
 set noshiftround
 " Linebreak on 500 characters
-set lbr
-set tw=79
-set ai "Auto indent
-set si "Smart indent
-" set wrap "Wrap lines
-set showbreak=+++ " Wrap-broken line prefix
-set number              " show line numbers
-set relativenumber      " show relative numbers
-set showcmd             " show command in bottom bar
-set foldenable          " enable folding
-set foldlevelstart=10   " open most folds by default
-set foldnestmax=10      " 10 nested fold max
+set linebreak
+set textwidth=79
+" Wrap lines
+set wrap
+" Wrap-broken line prefix
+set showbreak=+++
+" Show line numbers
+set number
+" Show relative numbers
+set relativenumber
+" Show command in bottom bar
+set showcmd
+" enable folding
+set foldenable
+" Open most folds by default
+set foldlevelstart=10
+" 10 nested fold max
+set foldnestmax=10
 set foldmethod=indent
-highlight ColorColumn ctermbg=058
 
 " => Status line
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -208,6 +215,7 @@ let g:AutoPairsFlyMode = 1
 let g:NERDSpaceDelims = 1
 map <C-f> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+highlight ColorColumn ctermbg=058
 fun! ToggleCC()
   if &cc == ''
     set cc=80
@@ -226,4 +234,3 @@ if maparg('<leader>s', 'n') ==# ''
 endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Specific Directories
-
