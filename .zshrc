@@ -64,7 +64,7 @@ autoload edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
 
 
-alias ls='ls -FGAl --color=auto'
+alias ls='ls -FGAlh --color=auto'
 alias dc='cd ..'
 
 cs() { cd "$@" && ls; }
