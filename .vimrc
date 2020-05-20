@@ -201,6 +201,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'Yggdroot/indentLine'
   Plug 'junegunn/goyo.vim'
   Plug 'ntpeters/vim-better-whitespace'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
