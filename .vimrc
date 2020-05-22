@@ -233,5 +233,6 @@ vnoremap <leader>s    y/<C-r>"<CR>
 if maparg('<leader>s', 'n') ==# ''
   nnoremap <silent> <leader>s :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><leader>s
 endif
+nnoremap <leader>b :ls<CR>:b<Space>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Specific Directories
