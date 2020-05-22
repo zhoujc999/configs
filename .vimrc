@@ -8,19 +8,12 @@ filetype plugin on
 filetype indent on
 " Set to auto read when a file is changed from the outside
 set autoread
-" With a map leader it's possible to do extra key combinations
-" like <leader>w saves the current file
-let mapleader = ","
 " Fast saving
-nmap <leader>w :w!<CR>
-" :W sudo saves the file
-" (useful for handling the permission-denied error)
 command W w !sudo tee % > /dev/null
 " Automatically save before commands like :next and :make"
 set autowrite
 " Enable mouse usage (all modes)"
 set mouse=a
-nnoremap <C-s> :w!<CR>
 " Highlight line which cursor is on
 set cursorline
 nnoremap j gj
@@ -58,7 +51,7 @@ set ruler
 " Height of the command bar
 set cmdheight=2
 " A buffer becomes hidden when it is abandoned
-set hid
+set hidden
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
@@ -98,7 +91,7 @@ if !exists("g:syntax_on")
     syntax enable
 endif
 let g:lightline = {
-      \ 'colorscheme': 'seoul256',
+      \ 'colorscheme': 'wombat',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
@@ -150,18 +143,18 @@ set smartindent
 set expandtab
 " Be smart when using tabs ;)
 set smarttab
-" 1 tab == 2 spaces
+" 1 tab == 4 spaces
 set formatoptions=tcqrn1
 set shiftwidth=4
 set tabstop=4 softtabstop=4
 set noshiftround
 " Linebreak on 500 characters
 set linebreak
-set textwidth=79
+set textwidth=500
 " Wrap lines
 set wrap
 " Wrap-broken line prefix
-set showbreak=+++
+set showbreak=<->
 " Show line numbers
 set number
 " Show relative numbers
@@ -194,24 +187,23 @@ endfunction
 call plug#begin('~/.vim/plugged')
   Plug 'itchyny/lightline.vim'
   Plug 'jiangmiao/auto-pairs'
-  Plug 'bfrg/vim-cpp-modern'
   Plug 'sheerun/vim-polyglot'
   Plug 'scrooloose/nerdtree'
   Plug 'scrooloose/nerdcommenter'
   Plug 'Yggdroot/indentLine'
-  Plug 'junegunn/goyo.vim'
   Plug 'ntpeters/vim-better-whitespace'
+  Plug 'ap/vim-buftabline'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+inoremap <silent><expr> <TAB>
+    \ pumvisible() ? "\<C-n>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
+    \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 let g:AutoPairsFlyMode = 1
 let g:NERDSpaceDelims = 1
 map <C-f> :NERDTreeToggle<CR>
@@ -225,14 +217,23 @@ fun! ToggleCC()
   endif
 endfun
 nnoremap <C-i> :call ToggleCC()<CR>
-nmap <leader>c   <Plug>NERDCommenterToggle
-vmap <leader>c   <Plug>NERDCommenterToggle<CR>gv
 let g:NERDCustomDelimiters = { 'c': { 'left': '//','right': ''  }  }
+
+" => Leader Key Bindings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let mapleader = ","
+nnoremap <leader>c   <Plug>NERDCommenterToggle
+vnoremap <leader>c   <Plug>NERDCommenterToggle<CR>gv
+" Use <leader>s to search on selected text
 vnoremap <leader>s    y/<C-r>"<CR>
 " Use <leader>s to clear search highlighting
 if maparg('<leader>s', 'n') ==# ''
   nnoremap <silent> <leader>s :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><leader>s
 endif
-nnoremap <leader>b :ls<CR>:b<Space>
+" Buffers
+nnoremap <C-B> :buffers<CR>:b<Space>
+nnoremap <C-N> :bnext<CR>
+nnoremap <C-P> :bprev<CR>
+
+" => Specific Directories Bindings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Specific Directories
