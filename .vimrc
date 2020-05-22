@@ -237,3 +237,4 @@ nnoremap <C-P> :bprev<CR>
 
 " => Specific Directories Bindings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Remember to CocInstall language servers
