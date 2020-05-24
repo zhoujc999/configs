@@ -26,6 +26,26 @@ set splitbelow splitright
 set nrformats-=octal
 " Use OS clipboard by default
 set clipboard^=unnamed,unnamedplus
+" Set utf8 as standard encoding and en_US as the standard language
+set encoding=utf8
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
+
+" => Plugins
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call plug#begin('~/.vim/plugged')
+  Plug 'morhetz/gruvbox'
+  Plug 'itchyny/lightline.vim'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'sheerun/vim-polyglot'
+  Plug 'ap/vim-buftabline'
+  Plug 'scrooloose/nerdtree'
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'jiangmiao/auto-pairs'
+  Plug 'Yggdroot/indentLine'
+  Plug 'ntpeters/vim-better-whitespace'
+call plug#end()
 
 " => VIM user interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -86,6 +106,8 @@ set noshowmode
 
 " => Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+colorscheme gruvbox
+set background=dark
 " Enable syntax highlighting
 if !exists("g:syntax_on")
     syntax enable
@@ -104,11 +126,6 @@ let g:lightline = {
 if $COLORTERM == 'gnome-terminal'
     set t_Co=256
 endif
-try
-    colorscheme gruvbox
-catch
-endtry
-set background=dark
 hi cCustomFunc  gui=bold guifg=yellowgreen
 hi cCustomClass gui=reverse guifg=#00FF00
 " Set extra options when running in GUI mode
@@ -122,10 +139,6 @@ set t_Co=256
 if &t_Co == 8 && $TERM !~# '^linux\|^Eterm'
   set t_Co=16
 endif
-" Set utf8 as standard encoding and en_US as the standard language
-set encoding=utf8
-" Use Unix as the standard file type
-set ffs=unix,dos,mac
 
 " => Files, backups and undo
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -169,6 +182,41 @@ set foldlevelstart=10
 set foldnestmax=10
 set foldmethod=indent
 
+" => FZF
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <C-P> :FZF<CR>
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+" => COC
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Install language servers
+let g:coc_global_extensions = [
+    \ 'coc-tsserver',
+    \ ]
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+inoremap <silent><expr> <TAB>
+    \ pumvisible() ? "\<C-n>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
+    \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
 " => Status line
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Always show the status line
@@ -184,28 +232,8 @@ function! HasPaste()
     endif
     return ''
 endfunction
-call plug#begin('~/.vim/plugged')
-  Plug 'itchyny/lightline.vim'
-  Plug 'jiangmiao/auto-pairs'
-  Plug 'sheerun/vim-polyglot'
-  Plug 'scrooloose/nerdtree'
-  Plug 'scrooloose/nerdcommenter'
-  Plug 'Yggdroot/indentLine'
-  Plug 'ntpeters/vim-better-whitespace'
-  Plug 'ap/vim-buftabline'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-call plug#end()
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-inoremap <silent><expr> <TAB>
-    \ pumvisible() ? "\<C-n>" :
-    \ <SID>check_back_space() ? "\<TAB>" :
-    \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-let g:AutoPairsFlyMode = 1
 let g:NERDSpaceDelims = 1
+let g:NERDCustomDelimiters = { 'c': { 'left': '//','right': ''  }  }
 map <C-f> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 highlight ColorColumn ctermbg=058
@@ -217,7 +245,6 @@ fun! ToggleCC()
   endif
 endfun
 nnoremap <C-i> :call ToggleCC()<CR>
-let g:NERDCustomDelimiters = { 'c': { 'left': '//','right': ''  }  }
 
 " => Leader Key Bindings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -231,10 +258,8 @@ if maparg('<leader>s', 'n') ==# ''
   nnoremap <silent> <leader>s :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><leader>s
 endif
 " Buffers
-nnoremap <C-B> :buffers<CR>:b<Space>
-nnoremap <C-N> :bnext<CR>
-nnoremap <C-P> :bprev<CR>
+nnoremap <leader>n :bnext<CR>
+nnoremap <leader>p :bprev<CR>
 
 " => Specific Directories Bindings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Remember to CocInstall language servers
