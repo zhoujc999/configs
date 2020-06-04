@@ -38,6 +38,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'itchyny/lightline.vim'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'jremmen/vim-ripgrep'
   Plug 'sheerun/vim-polyglot'
   Plug 'ap/vim-buftabline'
   Plug 'scrooloose/nerdtree'
@@ -198,7 +199,6 @@ let g:go_auto_sameids = 1
 
 " => FZF
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <C-P> :FZF<CR>
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -213,6 +213,12 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
+
+function! s:find_git_root()
+    return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
+command! ProjectFiles execute 'FZF' s:find_git_root()
+nnoremap <C-p> :ProjectFiles<CR>
 
 " => COC
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -233,6 +239,8 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 " => Ripgrep
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:rg_command = 'rg --vimgrep -S'
+let g:rg_root_types = ['.git']
 if executable('rg')
     let g:rg_derive_root='true'
 endif
@@ -241,11 +249,6 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Always show the status line
 set laststatus=2
-" Format the status line
-" set statusline=\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Line:\ %l\ \ \ \ \
-" \ \ \ \ \ \ \ \ \ \ \ \ \ \ Column:\ %c
-" set statusline=[TYPE=%Y]\ [POS=%l,%v][%p%%]\ [BUFFER=%n]\ %{strftime('%c')}
-" hi StatusLine ctermbg=Gray ctermfg=Black cterm=Bold
 function! HasPaste()
     if &paste
         return 'PASTE MODE  '

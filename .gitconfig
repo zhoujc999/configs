@@ -1,0 +1,30 @@
+[user]
+	email = zhoujc999@gmail.com
+	name = Jingchao Zhou
+[core]
+	editor = vim
+[diff]
+	algorithm = histogram
+[color]
+	ui = auto
+[color "branch"]
+	current = yellow bold
+	local = green bold
+	remote = cyan bold
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[color "status"]
+	added = green bold
+	changed = yellow bold
+	untracked = red bold
+[merge]
+	conflictstyle = diff3
+[log]
+  date = relative
+  graphColors = black,red,green
+[format]
+  pretty = format:%C(auto,yellow)%h%C(auto,magenta)% %C(auto,blue)%>(16,trunc)%ad %C(auto,green)%<(16,trunc)%aN%C(auto,reset)%s%C(auto,red)% gD% D
